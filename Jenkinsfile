@@ -45,6 +45,7 @@ pipeline {
                 #!/bin/bash
                 docker login
                 docker pull ${registry}:${BUILD_NUMBER}
+                source /etc/environment
                 '''
             }
         }
