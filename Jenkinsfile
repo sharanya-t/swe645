@@ -12,25 +12,39 @@ pipeline {
     agent any
     
     stages {
-        stage("Creating war file and docker image"){
-            steps{
-                script{
-                    checkout scm
-                    sh 'rm -rf *.war'
-                    sh 'jar -cvf survey.war -C swe645/ .'
-                    echo 'pwd -'
-                    sh 'pwd'
-                    sh 'echo ${BUILD_TIMESTAMP}'
-                }
-            }
-        }
-        stage('Build') {
+        stages {
+        stage('Cloning Git') {
             steps {
-                echo 'Building...'
-                script {
-                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+                git 'https://github.com/sharanya-t/swe645.git'
+                withAnt(installation: 'Ant1.10.7') {
+                    sh '''
+                    #!/bin/bash
+                    cd ~/workspace/swe645/swe645
+                    ls
+                    ant war
+                    '''
                 }
             }
         }
+        // stage("Creating war file and docker image"){
+        //     steps{
+        //         script{
+        //             checkout scm
+        //             sh 'rm -rf *.war'
+        //             sh 'jar -cvf survey.war -C swe645/ .'
+        //             echo 'pwd -'
+        //             sh 'pwd'
+        //             sh 'echo ${BUILD_TIMESTAMP}'
+        //         }
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         echo 'Building...'
+        //         script {
+        //             dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+        //         }
+        //     }
+        // }
     }
 }
