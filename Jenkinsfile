@@ -19,7 +19,7 @@ pipeline {
                     sh 'rm -rf *.war'
                     sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP}'
-                    sh 'echo ${DOCKER_PASS}'
+                    sh "docker login -u sthilagan98 -p ${DOCKERHUB_PASS}"
                 }
             }
         }
