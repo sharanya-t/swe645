@@ -1,37 +1,65 @@
-pipeline{
-    agent any
+pipeline {
     environment {
-        DOCKERHUB_PASS = credentials('docker-pass')
+        registry = "sthilagan98/hw2"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+        warFileName = "survey.war"
+        kubeconfig = "/var/ubuntu/.kube/config"  
+        deploymentName = "hw2-cluster-deployment"  
+        rancherClusterName = "cluster-1"  
     }
+    agent any
+    
     stages {
-        stage("Building the Student Survey Image") {
+        stage('Cloning Git') {
             steps {
-                script {
-                    checkout scm
-                    sh 'rm -rf *.war'
-                    sh 'jar -cvf survey.war -C swe645 .'
-                    sh 'echo ${BUILD_TIMESTAMP}'
-                    sh "docker login -u sthilagan98 -p ${DOCKERHUB_PASS}"
-                    sh 'docker build -t sthilagan98/hw2:${BUILD_TIMESTAMP} .'
+                git 'https://github.com/sharanya-t/swe645.git'
+                withAnt(installation: 'Ant1.10.7') {
+                    sh '''
+                    #!/bin/bash
+                    cd ~/workspace/swe645
+                    ls
+                    ant war
+                    '''
+                }
+            }
+        }
 
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                script {
+                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
                 }
             }
         }
-        stage("Pushing Image to DockerHub") {
+
+        stage('Deploy Image') {
             steps {
                 script {
-                    sh 'docker push sthilagan98/hw2:${BUILD_TIMESTAMP}'
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push()
+                    }
                 }
             }
         }
-        // stage("Deploying to Rancher as single pod") {
-        //     steps{
-        //         sh 'kubectl set image deployment/node-port container-0=sthilagan98/hw2:${BUILD_TIMESTAMP}'
-        //     }
-        // }
-        stage("Deploying to Rancher as load balancer"){
+
+        stage('Redeploy') {
             steps {
-                sh 'kubectl set image deployment/lb1 container-0=sthilagan98/hw2:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                echo 'Redeploying....'
+                sh '''
+                #!/bin/bash
+                docker login
+                docker pull ${registry}:${BUILD_NUMBER}
+                source /etc/environment
+                kubectl --kubeconfig ${kubeconfig} set image deployment/${deploymentName} ${deploymentName}=docker.io/${registry}:${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi ${registry}:${BUILD_NUMBER}"
             }
         }
     }
