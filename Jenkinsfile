@@ -21,6 +21,7 @@ pipeline {
                     sh 'echo ${BUILD_TIMESTAMP}'
                     echo 'whoami?'
                     sh 'whoami'
+                    sh 'ls /home/ubuntu'
                 }
             }
         }
