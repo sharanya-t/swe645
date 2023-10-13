@@ -45,8 +45,6 @@ pipeline {
                 #!/bin/bash
                 docker login
                 docker pull ${registry}:${BUILD_NUMBER}
-                // source /etc/environment
-                // kubectl --kubeconfig ${kubeconfig} set image deployment/${deploymentName} ${deploymentName}=docker.io/${registry}:${BUILD_NUMBER}
                 '''
             }
         }
