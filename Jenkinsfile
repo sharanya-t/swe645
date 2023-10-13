@@ -19,7 +19,6 @@ pipeline {
                     sh 'rm -rf *.war'
                     sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP}'
-                    sh 'sudo su jenkins'
                     sh "docker login -u sthilagan98 -p ${DOCKERHUB_PASS}"
                 }
             }
