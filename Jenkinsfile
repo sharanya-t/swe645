@@ -12,20 +12,19 @@ pipeline {
     agent any
     
     stages {
-        stages {
-            stage('Cloning Git') {
-                steps {
-                    git 'https://github.com/sharanya-t/swe645.git'
-                    withAnt(installation: 'Ant1.10.7') {
-                        sh '''
-                        #!/bin/bash
-                        cd ~/workspace/swe645/swe645
-                        ls
-                        ant war
-                        '''
-                    }
+        stage('Cloning Git') {
+            steps {
+                git 'https://github.com/sharanya-t/swe645.git'
+                withAnt(installation: 'Ant1.10.7') {
+                    sh '''
+                    #!/bin/bash
+                    cd ~/workspace/swe645/swe645
+                    ls
+                    ant war
+                    '''
                 }
             }
+        }
         // stage("Creating war file and docker image"){
         //     steps{
         //         script{
@@ -46,6 +45,5 @@ pipeline {
         //         }
         //     }
         // }
-        }
     }
 }
