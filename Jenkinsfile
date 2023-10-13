@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 script {
-                    dockerImage = docker.build("${registry}:${BUILD_TIMESTAMP}")
+                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
                 }
             }
         }
