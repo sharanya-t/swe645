@@ -16,7 +16,6 @@ pipeline {
                 script{
                     checkout scm
                     sh 'rm -rf *.war'
-                    // sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP'
                 }
             }
