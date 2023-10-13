@@ -18,7 +18,22 @@ pipeline {
                     sh 'rm -rf *.war'
                     sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP}'
+                    sh "docker login -u ${registry} -p "
                 }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                script {
+                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // Add your testing steps here
             }
         }
     }
