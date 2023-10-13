@@ -40,13 +40,7 @@ pipeline {
         }
         stage('Redeploy') {
             steps {
-                echo 'Redeploying....'
-                sh '''
-                #!/bin/bash
-                docker login
-                docker pull ${registry}:${BUILD_NUMBER}
-                source /etc/environment
-                '''
+                sh 'kubectl set image deployment/lb1 container-0=sthilagan98/hw2:${BUILD_NUMBER}'
             }
         }
     }
