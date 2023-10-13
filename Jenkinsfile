@@ -4,9 +4,7 @@ pipeline {
         registryCredential = 'dockerhub'
         dockerImage = ''
         warFileName = "survey.war"
-        kubeconfig = "/var/lib/jenkins/.kube/config"  
-        deploymentName = "hw2-cluster-deployment"  
-        rancherClusterName = "cluster-1"
+        deploymentName = "hw2-cluster-deployment"
     }
     agent any
     
@@ -21,7 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 echo 'Building...'
                 script {
@@ -40,7 +38,7 @@ pipeline {
         }
         stage('Redeploy') {
             steps {
-                sh 'kubectl set image deployment/hw2-cluster-deployment container-0=sthilagan98/hw2:${BUILD_NUMBER}'
+                sh 'kubectl set image deployment/${deploymentName} container-0=${registry}:${BUILD_NUMBER}'
             }
         }
     }
