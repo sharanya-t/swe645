@@ -16,7 +16,7 @@ pipeline {
                 script{
                     checkout scm
                     sh 'rm -rf *.war'
-                    sh 'echo ${BUILD_TIMESTAMP'
+                    sh 'echo ${BUILD_TIMESTAMP}'
                 }
             }
         }
