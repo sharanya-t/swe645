@@ -4,7 +4,7 @@ pipeline {
         registryCredential = 'dockerhub'
         dockerImage = ''
         warFileName = "survey.war"
-        kubeconfig = "/var/ubuntu/.kube/config"  
+        kubeconfig = "/var/lib/jenkins/.kube/config"  
         deploymentName = "hw2-cluster-deployment"  
         rancherClusterName = "cluster-1"  
     }
