@@ -18,7 +18,6 @@ pipeline {
                     sh 'rm -rf *.war'
                     sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP}'
-                    sh "docker login -u ${registry} -p "
                 }
             }
         }
