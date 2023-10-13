@@ -20,17 +20,17 @@ pipeline {
                     sh 'jar -cvf survey.war -C swe645/ .'
                     sh 'echo ${BUILD_TIMESTAMP}'
                     sh 'whoami'
-                    // sh "docker login -u sthilagan98 -p {DOCKERHUB_PASS}"
+                    sh "docker login -u sthilagan98 -p {DOCKERHUB_PASS}"
                 }
             }
         }
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                script {
-                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
-                }
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         echo 'Building...'
+        //         script {
+        //             dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+        //         }
+        //     }
+        // }
     }
 }
