@@ -18,10 +18,9 @@ pipeline {
                     checkout scm
                     sh 'rm -rf *.war'
                     sh 'jar -cvf survey.war -C swe645/ .'
+                    echo 'pwd -'
+                    sh 'pwd'
                     sh 'echo ${BUILD_TIMESTAMP}'
-                    echo 'whoami?'
-                    sh 'whoami'
-                    sh 'ls /home/ubuntu'
                 }
             }
         }
